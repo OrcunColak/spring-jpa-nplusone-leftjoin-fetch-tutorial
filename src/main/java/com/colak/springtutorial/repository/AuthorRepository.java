@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     // Use JPQL
-    @Query("SELECT a FROM Author a LEFT JOIN FETCH a.books WHERE a.id = :authorId")
+    @Query("SELECT a FROM Author a JOIN FETCH a.books WHERE a.id = :authorId")
     Optional<Author> findByIdWithBooks(@Param("authorId") Long authorId);
 
 }
