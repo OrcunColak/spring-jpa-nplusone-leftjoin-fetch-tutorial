@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -24,7 +25,7 @@ class AuthorRepositoryTest {
         Optional<Author> optional = repository.findById(1L);
         optional.ifPresentOrElse(author -> {
                     for (Book book : author.getBooks()) {
-                        log.info("Book title : {}", book.getTitle());
+                        log(author, book);
                     }
                 },
                 () -> Assertions.fail("Test failed")
@@ -33,14 +34,16 @@ class AuthorRepositoryTest {
 
     @Test
     @Transactional
-    void findByIdWithBooks() {
-        Optional<Author> optional = repository.findByIdWithBooks(1L);
-        optional.ifPresentOrElse(author -> {
-                    for (Book book : author.getBooks()) {
-                        log.info("Book title : {}", book.getTitle());
-                    }
-                },
-                () -> Assertions.fail("Test failed")
-        );
+    void findAllWithBooks() {
+        List<Author> authorList = repository.findAllWithBooks();
+        for (Author author : authorList) {
+            for (Book book : author.getBooks()) {
+                log(author, book);
+            }
+        }
+    }
+
+    private void log(Author author, Book book) {
+        log.info("Author : {} Book title : {}", author.getName(), book.getTitle());
     }
 }
